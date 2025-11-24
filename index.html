@@ -1,3 +1,61 @@
-welcome to mmafights.fun!
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMA FIGHTS FUN: Clash of the Stars PPV Stream</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
 
-made by hokejicek
+    <header class="main-header">
+        <div class="logo">MMA FIGHTS <span class="fun-text">FUN</span></div>
+        <nav>
+            <a href="#ppv" class="active">CLASH PPV</a>
+            <a href="#about">O CLASH</a>
+        </nav>
+    </header>
+
+    <main class="ppv-section" id="ppv">
+        <h1>CLASH 14: LAST MAN STANDING</h1>
+        <h2>Premium PPV Stream - Bez reklam, Full HD</h2>
+
+        <div class="info-box">
+            <p>⚔️ **6. PROSINEC 2025** | 🏟️ **SPORT. HALA FORTUNA, PRAHA**</p>
+        </div>
+
+        <div class="stream-options">
+            
+            <div class="option-card premium-card">
+                <h3>PREMIUM PŘÍSTUP (2 €)</h3>
+                <p>Zadejte svůj unikátní kód, který jste získali po zakoupení PPV. Sledujte bez reklam a v nejvyšší kvalitě.</p>
+                
+                <form id="ppv-code-form">
+                    <input type="text" id="ppvCode" placeholder="Zadejte PPV Kód (např. COTS14-XYZ123)" required>
+                    <button type="submit" class="btn primary-btn">OVĚŘIT KÓD A SLEDOVAT</button>
+                    <div id="message"></div>
+                </form>
+
+                <p class="small-info">Nemáte kód? Kupte zde: 
+                    <a href="https://hokejicek.mysellauth.com/product/ppv-clash" target="_blank" class="buy-link">KUP TEĎ!</a>
+                </p>
+            </div>
+
+            <div class="option-card free-card">
+                <h3>FREE PŘÍSTUP (S reklamami)</h3>
+                <p>Sledujte zdarma, ale s pravidelným přerušováním pop-up reklamami a v nižší kvalitě.</p>
+                <a href="free-stream.html" class="btn secondary-btn">PŘEJÍT NA FREE STREAM</a>
+                <p class="small-info">Vhodné pro ty, kteří nepotřebují nejlepší zážitek.</p>
+            </div>
+            
+        </div>
+    </main>
+    
+    <footer class="main-footer">
+        <p>© 2025 MMA FIGHTS FUN. Všechna práva vyhrazena. Používáním stránek souhlasíte s podmínkami.</p>
+    </footer>
+
+    <script src="ppv-script.js"></script>
+</body>
+</html>
