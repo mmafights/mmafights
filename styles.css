@@ -1,171 +1,198 @@
-/* --- Základní Styly --- */
 body {
-    font-family: 'Montserrat', sans-serif;
-    background-color: #1a1a1a; /* Tmavé pozadí */
-    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0d0d0d;
+    color: #f0f0f0;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-}
-
-h1, h2, h3 {
-    font-weight: 900;
-    color: #ff4500; /* Výrazná oranžová/červená barva pro nadpisy */
     text-align: center;
 }
-
-a {
-    color: #00bfff; /* Světle modrá pro odkazy */
-    text-decoration: none;
-}
-a:hover {
-    text-decoration: underline;
+* {
+    box-sizing: border-box;
 }
 
-/* --- Hlavička a Navigace --- */
-.main-header {
-    background-color: #0d0d0d;
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 3px solid #ff4500;
-}
-
-.logo {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-.fun-text {
-    color: #ff4500;
-}
-
-nav a {
-    margin-left: 20px;
-    font-weight: 700;
-    padding: 5px 10px;
-    transition: color 0.3s;
-}
-nav a.active {
-    color: #ff4500;
-    border-bottom: 2px solid #ff4500;
-}
-nav a:hover {
-    color: #fff;
-    text-decoration: none;
-}
-
-/* --- Hlavní Sekce a Info Box --- */
-.ppv-section {
-    padding: 50px 5% 80px;
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.info-box {
-    background-color: #2c2c2c;
+header {
+    background-color: #1a1a1a;
     padding: 15px;
-    margin: 20px auto 40px;
-    border-radius: 8px;
-    max-width: 600px;
-    border-left: 5px solid #ff4500;
-}
-
-/* --- Karty s Volbami Streamu --- */
-.stream-options {
     display: flex;
     justify-content: space-around;
-    gap: 30px;
-    margin-top: 40px;
+    align-items: center;
+    border-bottom: 2px solid #ff0000;
+}
+#logo {
+    font-size: 2em;
+    font-weight: 900;
+    color: #ff0000;
+}
+header a {
+    color: #f0f0f0;
+    text-decoration: none;
+    margin: 0 15px;
+    transition: color 0.3s;
+}
+header a:hover {
+    color: #ffcc00;
 }
 
-.option-card {
-    background-color: #2c2c2c;
-    padding: 30px;
-    border-radius: 10px;
-    flex: 1;
-    max-width: 450px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s;
+#hero {
+    padding: 100px 20px;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1500x500/000000/ff0000?text=FNC+26+BANNER') center/cover;
 }
-.option-card:hover {
-    transform: translateY(-5px);
+h1 {
+    font-size: 4em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+    margin-bottom: 10px;
 }
-
-.premium-card {
-    border: 3px solid #ff4500; /* Výrazný rámeček pro Premium */
+h2 {
+    color: #ffcc00;
+    margin-top: 0;
 }
-
-/* --- Tlačítka a Formulář --- */
-.btn {
-    display: block;
-    padding: 15px;
+.small-text {
     margin-top: 20px;
-    border-radius: 5px;
-    font-weight: 700;
-    text-transform: uppercase;
-    transition: background-color 0.3s;
-    cursor: pointer;
-    border: none;
-    text-align: center;
-}
-
-.primary-btn {
-    background-color: #ff4500;
-    color: #ffffff;
-}
-.primary-btn:hover {
-    background-color: #cc3700;
-    text-decoration: none;
-}
-
-.secondary-btn {
-    background-color: #555555;
-    color: #ffffff;
-}
-.secondary-btn:hover {
-    background-color: #333333;
-    text-decoration: none;
-}
-
-#ppvCode {
-    width: calc(100% - 30px);
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #555;
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-size: 16px;
-}
-
-.buy-link {
-    color: #00bfff;
-    font-weight: 700;
-}
-
-.small-info {
     font-size: 0.9em;
-    margin-top: 15px;
 }
 
-/* --- Patička --- */
-.main-footer {
-    background-color: #0d0d0d;
+.cta-button {
+    padding: 15px 30px;
+    margin: 15px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 5px;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+}
+.primary {
+    background-color: #ff0000;
+    color: white;
+}
+.primary:hover {
+    background-color: #cc0000;
+}
+.secondary {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #555;
+}
+.secondary:hover {
+    background-color: #555555;
+}
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.95);
+    padding-top: 50px;
+}
+.modal-content {
+    background-color: #1a1a1a;
+    margin: 5% auto;
+    padding: 30px;
+    border: 1px solid #333;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+}
+.modal-content-full { 
+    background-color: #000000;
+    margin: 1% auto;
+    width: 98%;
+    max-width: 1400px;
+    height: 98vh;
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    transition: color 0.3s;
+}
+.close-button:hover {
+    color: #ff0000;
+}
+
+input[type="text"] {
+    padding: 12px;
+    margin: 20px 0 10px 0;
+    width: 90%;
+    background-color: #333;
+    border: 1px solid #ff0000;
+    color: white;
+    border-radius: 4px;
+    font-size: 1em;
     text-align: center;
-    padding: 20px;
-    font-size: 0.8em;
-    color: #888;
+}
+.error-text {
+    color: #ffcc00;
+    font-weight: bold;
+    margin-top: 10px;
 }
 
-/* --- Media Queries pro Mobily --- */
-@media (max-width: 768px) {
-    .stream-options {
-        flex-direction: column;
-    }
-    .option-card {
-        margin-bottom: 20px;
-    }
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #333;
+}
+th {
+    background-color: #2a2a2a;
+    color: #ff0000;
+    text-transform: uppercase;
+}
+tbody tr:nth-child(even) {
+    background-color: #121212;
+}
+.mt-20 {
+    margin-top: 20px;
+}
+
+#stream-info {
+    padding: 10px 0;
+    text-align: left;
+    height: 30px;
+}
+#mma-stream {
+    width: 100%;
+    height: calc(100% - 70px);
+}
+
+#ad-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.98);
+    color: white;
+    display: none; 
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    text-align: center;
+    z-index: 100; 
+}
+#ad-timer {
+    font-size: 4em;
+    color: #ffcc00;
+    margin: 20px;
 }
