@@ -1,5 +1,5 @@
 let videoPlayer = null;
-let adTimerInterval = null;
+let popupAdInterval = null; 
 
 function showModal(modalId) {
     document.getElementById(modalId).style.display = 'block';
@@ -12,33 +12,47 @@ function hideModal(modalId) {
 function handleStreamClose() {
     hideModal('stream-modal');
     if (videoPlayer) videoPlayer.pause();
-    if (adTimerInterval) clearInterval(adTimerInterval);
 }
 
+// Funkce pro zobrazení Free Stream sekce a spuštění Pop-up reklam
+function showFreeStreamSection() {
+    const section = document.getElementById('free-stream-section');
+    const embed = document.getElementById('free-stream-embed');
+    
+    // !!! ZDE VLOŽTE URL VAŠEHO FREE STREAM EMBEDU !!!
+    const freeEmbedUrl = "https://[ZDE_BUDE_ADRESA_VAŠEHO_FREE_EMBEDU]/stream"; 
+    
+    // 1. Zobrazíme sekci a vložíme stream
+    section.style.display = 'block';
+    embed.src = freeEmbedUrl;
+    
+    // 2. Skrolujeme k sekci
+    section.scrollIntoView({ behavior: 'smooth' });
+    
+    // 3. Spustíme Pop-up reklamy
+    startPopupAds();
+}
+
+// Funkce pro PPV stream (používá Video.js pro M3U8)
 function showStream(version) {
     const playerElement = document.getElementById('mma-stream');
     const streamInfo = document.getElementById('stream-info');
-    const adOverlay = document.getElementById('ad-overlay');
 
-    if (adTimerInterval) clearInterval(adTimerInterval);
-    adOverlay.style.display = 'none';
+    // Ujistíme se, že PPV vypne Free sekci a Pop-up reklamy
+    if (popupAdInterval) {
+        clearInterval(popupAdInterval);
+        popupAdInterval = null;
+    }
+    document.getElementById('free-stream-section').style.display = 'none';
+
     showModal('stream-modal');
     
     const ppvStreamUrl = 'http://[VÁŠ_SERVER]/fnc26_secured_live.m3u8'; 
-    const freeStreamUrl = 'http://[VÁŠ_SERVER]/fnc26_low_res_ad.m3u8'; 
 
     if (version === 'ppv') {
         streamInfo.innerHTML = '<h2>PREMIUM LIVE STREAM FNC 26 (PPV)</h2>';
         setupPlayer(playerElement, ppvStreamUrl);
-    } else {
-        streamInfo.innerHTML = '<h2 class="error-text">FREE LIVE STREAM FNC 26</h2>';
-        setupPlayer(playerElement, freeStreamUrl);
-        startAdTimer(adOverlay);
-    }
-}
-
-function handleFreeStream() {
-    showStream('free');
+    } 
 }
 
 function setupPlayer(element, url) {
@@ -55,30 +69,26 @@ function setupPlayer(element, url) {
     });
 }
 
-function startAdTimer(adOverlay) {
-    const adDuration = 30;
-    const adInterval = 900000;
+function startPopupAds() {
+    if (popupAdInterval) return;
 
-    function showAd() {
-        if (videoPlayer) videoPlayer.pause();
-        
-        adOverlay.style.display = 'flex';
-        let timer = adDuration;
-        const timerElement = document.getElementById('ad-timer');
-        timerElement.textContent = timer;
+    // !!! ZDE VLOŽTE URL VAŠÍ POP-UP REKLAMY !!!
+    const popupUrl = "https://[VASE_REKLAMNI_URL]/popup"; 
+    const interval = 600000; // 10 minut
 
-        const countdown = setInterval(() => {
-            timer--;
-            timerElement.textContent = timer;
-            if (timer <= 0) {
-                clearInterval(countdown);
-                adOverlay.style.display = 'none';
-                if (videoPlayer) videoPlayer.play();
-            }
-        }, 1000);
+    function showPopup() {
+        // Kontrola, zda je uživatel stále na stránce a neotevřel PPV
+        if (document.getElementById('free-stream-section').style.display === 'block') {
+            window.open(popupUrl, '_blank', 'width=600,height=400,resizable=yes,scrollbars=yes');
+        } else {
+             clearInterval(popupAdInterval);
+             popupAdInterval = null;
+        }
     }
-    
-    adTimerInterval = setInterval(showAd, adInterval);
+
+    // První reklama se spustí po 30 sekundách, poté každých 10 minut
+    setTimeout(showPopup, 30000); 
+    popupAdInterval = setInterval(showPopup, interval);
 }
 
 async function checkCode() {
