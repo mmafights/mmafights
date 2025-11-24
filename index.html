@@ -3,59 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMA FIGHTS FUN: Clash of the Stars PPV Stream</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>MMAFights.fun - FNC 26: Janicic vs. Oliveira LIVE</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link href="https://vjs.zencdn.net/8.6.1/video-js.css" rel="stylesheet" /> 
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="logo">MMA FIGHTS <span class="fun-text">FUN</span></div>
+    <header>
+        <div id="logo">MMAFights.fun 🥊</div>
         <nav>
-            <a href="#ppv" class="active">CLASH PPV</a>
-            <a href="#about">O CLASH</a>
+            <a href="#" onclick="showModal('info-modal')">FNC 26 Fight Card</a>
+            <a href="https://discord.gg/kpcE2SzVTr" target="_blank">Discord</a>
         </nav>
     </header>
 
-    <main class="ppv-section" id="ppv">
-        <h1>CLASH 14: LAST MAN STANDING</h1>
-        <h2>Premium PPV Stream - Bez reklam, Full HD</h2>
+    <main>
+        <section id="hero">
+            <h1>FNC 26: JANICIC vs. OLIVEIRA</h1>
+            <h2>20. PROSINEC 2025 | PODGORICA</h2>
+            <p>Sledujte kompletní kartu živě. Vyberte si prémiový stream bez reklam nebo bezplatnou verzi s pop-up reklamami.</p>
 
-        <div class="info-box">
-            <p>⚔️ **6. PROSINEC 2025** | 🏟️ **SPORT. HALA FORTUNA, PRAHA**</p>
-        </div>
-
-        <div class="stream-options">
+            <button class="cta-button primary" onclick="showModal('ppv-purchase-modal')">KOUPIT PPV A SLEDOVAT ZA 2 €</button>
+            <button class="cta-button secondary" onclick="handleFreeStream()">SLEDOVAT ZDARMA (S REKLAMAMI)</button>
             
-            <div class="option-card premium-card">
-                <h3>PREMIUM PŘÍSTUP (2 €)</h3>
-                <p>Zadejte svůj unikátní kód, který jste získali po zakoupení PPV. Sledujte bez reklam a v nejvyšší kvalitě.</p>
-                
-                <form id="ppv-code-form">
-                    <input type="text" id="ppvCode" placeholder="Zadejte PPV Kód (např. COTS14-XYZ123)" required>
-                    <button type="submit" class="btn primary-btn">OVĚŘIT KÓD A SLEDOVAT</button>
-                    <div id="message"></div>
-                </form>
-
-                <p class="small-info">Nemáte kód? Kupte zde: 
-                    <a href="https://hokejicek.mysellauth.com/product/ppv-clash" target="_blank" class="buy-link">KUP TEĎ!</a>
-                </p>
-            </div>
-
-            <div class="option-card free-card">
-                <h3>FREE PŘÍSTUP (S reklamami)</h3>
-                <p>Sledujte zdarma, ale s pravidelným přerušováním pop-up reklamami a v nižší kvalitě.</p>
-                <a href="free-stream.html" class="btn secondary-btn">PŘEJÍT NA FREE STREAM</a>
-                <p class="small-info">Vhodné pro ty, kteří nepotřebují nejlepší zážitek.</p>
-            </div>
-            
-        </div>
+            <p class="small-text">Sledujte nás na <a href="https://discord.gg/kpcE2SzVTr" target="_blank">Discordu</a> pro aktuální info.</p>
+        </section>
     </main>
-    
-    <footer class="main-footer">
-        <p>© 2025 MMA FIGHTS FUN. Všechna práva vyhrazena. Používáním stránek souhlasíte s podmínkami.</p>
-    </footer>
 
-    <script src="ppv-script.js"></script>
+    <div id="ppv-purchase-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="hideModal('ppv-purchase-modal')">&times;</span>
+            <h2>💰 Získejte Váš PPV Kód (2 €)</h2>
+            <p>Pro získání přístupu postupujte dle následujících kroků. Platba probíhá manuálně přes Discord.</p>
+            <ol>
+                <li><strong>Krok 1:</strong> Připojte se na náš <a href="https://discord.gg/kpcE2SzVTr" target="_blank">**Discord server MMA Fights CZ/SK**</a>.</li>
+                <li><strong>Krok 2:</strong> V kanálu **#ppv-platby** postupujte dle instrukcí k zaplacení 2 €.</li>
+                <li><strong>Krok 3:</strong> Administrátor Vám zašle **unikátní PPV kód** (např. <code>FNC26-A1B2C3D4E5</code>).</li>
+            </ol>
+            <button class="cta-button primary" onclick="showModal('ppv-code-modal'); hideModal('ppv-purchase-modal');">MÁM KÓD, JÍT KE STREAMU</button>
+        </div>
+    </div>
+
+    <div id="ppv-code-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="hideModal('ppv-code-modal')">&times;</span>
+            <h2>🔑 Vstupte do Oktagonu</h2>
+            <p>Zadejte Váš unikátní PPV kód:</p>
+            <input type="text" id="ppv-code" placeholder="Váš 10místný kód" maxlength="12">
+            <p id="message" class="error-text"></p>
+            <button class="cta-button primary" onclick="checkCode()">AKTIVOVAT KÓD A SPUSTIT STREAM</button>
+        </div>
+    </div>
+    
+    <div id="stream-modal" class="modal stream-modal">
+        <div class="modal-content-full">
+            <span class="close-button" onclick="handleStreamClose()">&times;</span>
+            
+            <div id="stream-info"></div> 
+            
+            <video id="mma-stream" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="auto"></video>
+            
+            <div id="ad-overlay">
+                <h2>REKLAMNÍ PŘESTÁVKA</h2>
+                <p>Nyní běží reklama. Prémiový stream za 2 € je bez přerušení.</p>
+                <div id="ad-timer">30</div>
+                <button class="cta-button primary" onclick="showModal('ppv-purchase-modal'); handleStreamClose();">KOUPIT PPV A ZASTAVIT REKLAMY</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="info-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="hideModal('info-modal')">&times;</span>
+            <h2>🔥 FIGHT CARD: FNC 26</h2>
+            <table>
+                <thead>
+                    <tr><th>Zápas</th><th>Váhová Kategorie</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>**Janicic vs. Oliveira**</td><td>Hlavní zápas (Light Heavyweight)</td></tr>
+                    <tr><td>Kovac vs. Turek</td><td>Co-Main Event (Middleweight)</td></tr>
+                    <tr><td>Vito vs. Fila</td><td>Bantamweight</td></tr>
+                    <tr><td>Zuzak vs. Krizan</td><td>Catchweight</td></tr>
+                </tbody>
+            </table>
+            <p class="small-text mt-20">Karta se může měnit. Sledujte náš Discord pro aktuální informace.</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBbjveg1jo587b1OqNWc8cHxkLeMnoE884",
+            authDomain: "mmafights-a4426.firebaseapp.com",
+            projectId: "mmafights-a4426",
+            storageBucket: "mmafights-a4426.firebasestorage.app",
+            messagingSenderId: "1065535103346",
+            appId: "1:1065535103346:web:31368046583850a763fdeb",
+            measurementId: "G-KZB2BEJ0W2"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+    </script>
+    
+    <script src="https://vjs.zencdn.net/8.6.1/video.min.js"></script>
+    <script src="script.js"></script> 
 </body>
 </html>
