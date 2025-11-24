@@ -13,6 +13,7 @@ document.getElementById('ppv-code-form').addEventListener('submit', function(e) 
     // const VERIFY_API_URL = 'https://tvuj-serverless-endpoint.vercel.app/api/verify-code';
 
     /*
+                                                    
     fetch(VERIFY_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
