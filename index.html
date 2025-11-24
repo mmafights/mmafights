@@ -24,9 +24,18 @@
             <p>Sledujte kompletní kartu živě. Vyberte si prémiový stream bez reklam nebo bezplatnou verzi s pop-up reklamami.</p>
 
             <button class="cta-button primary" onclick="showModal('ppv-purchase-modal')">KOUPIT PPV A SLEDOVAT ZA 2 €</button>
-            <button class="cta-button secondary" onclick="handleFreeStream()">SLEDOVAT ZDARMA (S REKLAMAMI)</button>
+            <button class="cta-button secondary" onclick="showFreeStreamSection()">SLEDOVAT ZDARMA (S REKLAMAMI)</button>
             
             <p class="small-text">Sledujte nás na <a href="https://discord.gg/kpcE2SzVTr" target="_blank">Discordu</a> pro aktuální info.</p>
+        </section>
+
+        <section id="free-stream-section" style="display:none; padding: 40px 20px;">
+            <h3>📺 FREE PŘENOS FNC 26</h3>
+            <p class="error-text">Upozornění: Tato verze přenosu generuje pop-up reklamní okna.</p>
+            <div id="embed-container">
+                <iframe id="free-stream-embed" width="100%" height="550" src="about:blank" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+            <button class="cta-button primary" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); showModal('ppv-purchase-modal');">PŘEJÍT NA PPV (BEZ REKLAM)</button>
         </section>
     </main>
 
@@ -34,11 +43,11 @@
         <div class="modal-content">
             <span class="close-button" onclick="hideModal('ppv-purchase-modal')">&times;</span>
             <h2>💰 Získejte Váš PPV Kód (2 €)</h2>
-            <p>Pro získání přístupu postupujte dle následujících kroků. Platba probíhá manuálně přes Discord.</p>
+            <p>Platba probíhá manuálně přes Discord:</p>
             <ol>
-                <li><strong>Krok 1:</strong> Připojte se na náš <a href="https://discord.gg/kpcE2SzVTr" target="_blank">**Discord server MMA Fights CZ/SK**</a>.</li>
-                <li><strong>Krok 2:</strong> V kanálu **#ppv-platby** postupujte dle instrukcí k zaplacení 2 €.</li>
-                <li><strong>Krok 3:</strong> Administrátor Vám zašle **unikátní PPV kód** (např. <code>FNC26-A1B2C3D4E5</code>).</li>
+                <li><strong>Krok 1:</strong> Připojte se na <a href="https://discord.gg/kpcE2SzVTr" target="_blank">**Discord server**</a>.</li>
+                <li><strong>Krok 2:</strong> V kanálu **#ppv-platby** zaplaťte 2 €.</li>
+                <li><strong>Krok 3:</strong> Administrátor Vám zašle **unikátní PPV kód**.</li>
             </ol>
             <button class="cta-button primary" onclick="showModal('ppv-code-modal'); hideModal('ppv-purchase-modal');">MÁM KÓD, JÍT KE STREAMU</button>
         </div>
@@ -62,13 +71,6 @@
             <div id="stream-info"></div> 
             
             <video id="mma-stream" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="auto"></video>
-            
-            <div id="ad-overlay">
-                <h2>REKLAMNÍ PŘESTÁVKA</h2>
-                <p>Nyní běží reklama. Prémiový stream za 2 € je bez přerušení.</p>
-                <div id="ad-timer">30</div>
-                <button class="cta-button primary" onclick="showModal('ppv-purchase-modal'); handleStreamClose();">KOUPIT PPV A ZASTAVIT REKLAMY</button>
-            </div>
         </div>
     </div>
     
@@ -87,7 +89,7 @@
                     <tr><td>Zuzak vs. Krizan</td><td>Catchweight</td></tr>
                 </tbody>
             </table>
-            <p class="small-text mt-20">Karta se může měnit. Sledujte náš Discord pro aktuální informace.</p>
+            <p class="small-text mt-20">Karta se může měnit. Sledujte náš Discord.</p>
         </div>
     </div>
 
