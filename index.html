@@ -1,119 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MMA Fights | Coming Soon</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="MMA Fights – official website is coming soon. Stay tuned for fight streams, highlights and more.">
-
-  <link rel="icon" type="image/png" href="https://mmafights.fun/files/png/mmafights.png">
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #202020 0%, #050505 55%, #000000 100%);
-      color: #f5f5f5;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .wrapper {
-      text-align: center;
-      padding: 24px;
-      max-width: 520px;
-      width: 100%;
-    }
-    .logo {
-      font-size: 2.4rem;
-      letter-spacing: 0.08em;
-      font-weight: 800;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-    .logo span {
-      color: #e63946;
-    }
-    .tagline {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      opacity: 0.8;
-      margin-bottom: 32px;
-    }
-    .card {
-      background: rgba(10, 10, 10, 0.9);
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 26px 22px 22px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(10px);
-    }
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 12px;
-    }
-    p {
-      font-size: 0.98rem;
-      line-height: 1.5;
-      opacity: 0.9;
-      margin-bottom: 18px;
-    }
-    .highlight {
-      font-weight: 600;
-      color: #e63946;
-    }
-    .domain {
-      font-family: "Courier New", monospace;
-      font-size: 0.95rem;
-      opacity: 0.85;
-      margin-bottom: 12px;
-    }
-    .footer {
-      margin-top: 18px;
-      font-size: 0.8rem;
-      opacity: 0.6;
-    }
-    .pill {
-      display: inline-block;
-      border-radius: 999px;
-      border: 1px solid rgba(230, 57, 70, 0.7);
-      padding: 6px 14px;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      margin-bottom: 16px;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Webovka MMA — Live Stream</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="img/favicon.png" />
+  <link rel="apple-touch-icon" href="img/favicon.png" />
 </head>
 <body>
-  <div class="wrapper">
-    <div class="logo">
-      MMA<span>FIGHTS</span>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">
+        <a href="/" class="text-logo" aria-label="MMAFIGHTS">
+          <img src="img/logo1.png" alt="MMAFIGHTS" class="site-logo">MMAFIGHTS
+        </a>
+      </h1>
+      <nav class="nav">
+        <button id="vipBtn" class="btn vip disabled" aria-disabled="true" disabled>VIP (Not available)</button>
+      </nav>
     </div>
-    <div class="tagline">
-      FIGHTS · HIGHLIGHTS · ACTION
-    </div>
+  </header>
 
-    <div class="card">
-      <div class="pill">Website under construction</div>
-      <h1>We are preparing something big.</h1>
-      <p>
-        The official <span class="highlight">MMA Fights</span> website is currently being prepared.
-        We are working on bringing you live events, highlights and exclusive content.
-      </p>
-      <p class="domain">
-        mmafights.fun
-      </p>
-      <p class="footer">
-        Stay tuned and check back soon.
-      </p>
+  <main class="container main-grid">
+    <section class="player-card">
+      <div class="player-top">
+        <h2>Welcome to our Livestream!</h2>
+      </div>
+
+      <div class="player-wrap">
+        <div class="video">
+          <video id="hlsPlayer" class="hls-video" playsinline></video>
+
+          <div class="video-topbar">
+            <div class="vt-left">
+              <span class="live-dot" aria-hidden="true"></span>
+              <strong class="vt-title">Live Stream — brought to you by MMAFIGHTS!</strong>
+            </div>
+            <div class="vt-right">
+              <button id="toggleChat" class="btn">Collapse chat</button>
+            </div>
+          </div>
+
+          <div class="video-controls">
+            <button id="playPauseBtn" class="control-btn" title="Play/Pause">▶</button>
+            <div class="volume-control">
+              <label for="volumeSlider" class="sr-only">Volume</label>
+              <input id="volumeSlider" type="range" min="0" max="100" value="100" title="Volume">
+            </div>
+            <button id="fullscreenBtn" class="control-btn" title="Fullscreen">⛶</button>
+          </div>
+        </div>
+      </div>
+
+      
+    </section>
+
+    <aside class="chat-card">
+      <div class="chat-top">
+        <h3>Stream Chat</h3>
+        <div class="chat-actions">
+          <button id="authBtn" class="btn small">Sign in with Google</button>
+          <button id="signOutBtn" class="btn small" hidden>Sign out</button>
+        </div>
+      </div>
+      <div id="chatNotice" class="muted small" style="padding:10px; text-align:center;"></div>
+      <form id="msgForm" class="msg-form" style="display:none;">
+        <input id="msgInput" type="text" placeholder="Write a message…" />
+        <button id="sendMsg" type="submit" class="btn">Send</button>
+      </form>
+      <div id="messages" class="messages"></div>
+    </aside>
+  </main>
+
+  <div id="vipModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="vipTitle">
+      <button class="modal-close" id="closeModal" aria-label="Close">×</button>
+      <h2 id="vipTitle">VIP Purchase</h2>
+      <p class="muted">VIP purchase is not available in this demo.</p>
+
+      <form id="vipForm">
+        <label>Name
+          <input type="text" id="name" required placeholder="Your name" />
+        </label>
+        <label>Email
+          <input type="email" id="email" required placeholder="email@example.com" />
+        </label>
+
+        <div class="price">Price: <strong>199 CZK / month</strong></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Pay (simulation)</button>
+          <button type="button" class="btn" id="cancelBtn">Cancel</button>
+        </div>
+      </form>
+
+      <div id="vipResult" class="vip-result" hidden></div>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© 2025 MMAFIGHTS</small>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
