@@ -1,115 +1,104 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="cs">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MMA FIGHTS — Live Stream</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="img/favicon.png" />
-  <link rel="apple-touch-icon" href="img/favicon.png" />
-  <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+  <meta charset="UTF-8">
+  <title>Stream + Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #050505, #0d0f14, #111319);
+      font-family: "Segoe UI", sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .wrapper {
+      width: 94vw;
+      height: 92vh;
+      display: flex;
+      gap: 20px;
+    }
+
+    .card {
+      flex: 1;
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(20, 22, 28, 0.55);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 0 30px rgba(0,0,0,0.55);
+      position: relative;
+    }
+
+    .card.video {
+      flex: 2.3;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 18px;
+    }
+
+    #player {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 900px) {
+      .wrapper {
+        flex-direction: column;
+        height: 95vh;
+      }
+
+      .card.video {
+        flex: 1.4;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1 class="logo">
-        <a href="/" class="text-logo" aria-label="MMAFIGHTS">
-          <img src="img/logo1.png" alt="MMAFIGHTS" class="site-logo">MMAFIGHTS
-        </a>
-      </h1>
-      <nav class="nav">
-        <button id="vipBtn" class="btn vip disabled" aria-disabled="true" disabled>VIP (Not available)</button>
-      </nav>
+  <div class="wrapper">
+
+    <!-- VIDEO -->
+    <div class="card video">
+      <div id="player"></div>
     </div>
-  </header>
 
-  <main class="container main-grid">
-    <section class="player-card">
-      <div class="player-top">
-        <h2>Welcome to our Livestream!</h2>
-      </div>
-
-      <div class="player-wrap">
-        <div class="video">
-          <div class="video-topbar">
-            <div class="vt-left">
-              <span class="live-dot" aria-hidden="true"></span>
-              <strong class="vt-title">Live Stream — brought to you by MMAFIGHTS!</strong>
-            </div>
-            <div class="vt-right">
-              <button id="toggleChat" class="btn">Collapse chat</button>
-            </div>
-          </div>
-
-          <iframe
-            src="https://freakplanet.shop/player.php?id=gromda"
-            allowfullscreen
-            frameborder="0"
-            style="width:100%;height:100%;border:0;display:block;"
-          ></iframe>
-        </div>
-      </div>
-    </section>
-
-    <aside class="chat-card">
-      <div class="chat-top">
-        <h3>Stream Chat</h3>
-        <div class="chat-actions">
-          <button id="authBtn" class="btn small">Sign in with Google</button>
-          <button id="signOutBtn" class="btn small" hidden>Sign out</button>
-        </div>
-      </div>
-      <div id="chatNotice" class="muted small" style="padding:10px; text-align:center;"></div>
-      <form id="msgForm" class="msg-form" style="display:none;">
-        <input id="msgInput" type="text" placeholder="Write a message…" />
-        <button id="sendMsg" type="submit" class="btn">Send</button>
-      </form>
-      <div id="messages" class="messages"></div>
-    </aside>
-  </main>
-
-  <div id="vipModal" class="modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="vipTitle">
-      <button class="modal-close" id="closeModal" aria-label="Close">×</button>
-      <h2 id="vipTitle">VIP Purchase</h2>
-      <p class="muted">VIP purchase is not available in this demo.</p>
-
-      <form id="vipForm">
-        <label>Name
-          <input type="text" id="name" required placeholder="Your name" />
-        </label>
-        <label>Email
-          <input type="email" id="email" required placeholder="email@example.com" />
-        </label>
-
-        <div class="price">Price: <strong>49 CZK / month</strong></div>
-
-        <div class="form-actions">
-          <button type="submit" class="btn primary">Pay (simulation)</button>
-          <button type="button" class="btn" id="cancelBtn">Cancel</button>
-        </div>
-      </form>
-
-      <div id="vipResult" class="vip-result" hidden></div>
+    <!-- CHAT -->
+    <div class="card">
+      <iframe src="https://hokejicek.site/livechat/"></iframe>
     </div>
+
   </div>
 
-  <footer class="site-footer">
-    <div class="container">
-      <small>© 2025 MMAFIGHTS</small>
-    </div>
-  </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="main.js"></script>
-  <script type="text/javascript">
-    aclib.runAutoTag({
-      zoneId: 'zitkptgwk8'
+  <script>
+    var player = new Clappr.Player({
+      source: "https://live.kinescopecdn.net/on-air/5de2e2b9-0bbd-40ee-b594-b8365bbe135b/a5cd6609-c576-4ca5-9f57-098ea311d163/1080p/media.m3u8",
+      parentId: "#player",
+      autoPlay: true,
+      mute: false,
+      width: "100%",
+      height: "100%",
+      playbackNotSupportedMessage: "Video není podporováno."
     });
   </script>
+
 </body>
 </html>
