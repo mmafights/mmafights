@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<title>ArenaSport7</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  font-family:system-ui,sans-serif
+}
+#player{position:fixed;inset:0;background:#000}
+video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000
+}
+
+/* ================= CONTROLS ================= */
+.controls{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  padding:10px 16px;
+  background:linear-gradient(to top,rgba(0,0,0,.9),transparent);
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.left,.right{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  pointer-events:auto;
+}
+button{
+  background:none;
+  border:0;
+  cursor:pointer;
+  padding:4px;
+}
+button svg{
+  width:24px;
+  height:24px;
+  stroke:#fff;
+  stroke-width:2;
+  fill:none;
+}
+
+/* ================= VOLUME ================= */
+.volume{display:flex;align-items:center;gap:10px}
+.volume input{width:120px}
+
+/* ================= LIVE ================= */
+.live{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#fff;
+  font-size:13px;
+}
+.dot{
+  width:10px;
+  height:10px;
+  background:red;
+  border-radius:50%;
+  box-shadow:0 0 6px red;
+}
+
+/* ================= QUALITY ================= */
+.quality{position:relative}
+#qualityBtn{color:#fff}
+.quality-menu{
+  position:absolute;
+  bottom:36px;
+  right:0;
+  background:rgba(0,0,0,.9);
+  border-radius:8px;
+  display:none;
+  flex-direction:column;
+  min-width:140px;
+}
+.quality-menu div{
+  padding:10px 16px;
+  color:#fff;
+  cursor:pointer;
+}
+.quality-menu div:hover{
+  background:rgba(255,255,255,.15);
+}
+
+/* ================= CONTEXT MENU ================= */
+#contextMenu{
+  position:fixed;
+  display:none;
+  min-width:220px;
+  background:#0f0f0f;
+  border:1px solid #2a2a2a;
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  z-index:9999;
+}
+.cm-item{
+  padding:12px 16px;
+  color:#fff;
+  cursor:pointer;
+  border-bottom:1px solid #1f1f1f;
+}
+.cm-item:last-child{border-bottom:none}
+.cm-item:hover{background:#1c1c1c}
+
+/* ================= OVERLAY PANEL ================= */
+.overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+.overlay-box{
+  background:#0f0f0f;
+  border-radius:12px;
+  padding:24px;
+  width:90%;
+  max-width:520px;
+  color:#fff;
+}
+.overlay-box h2{margin-top:0}
+.overlay-close{
+  position:absolute;
+  top:20px;
+  right:24px;
+  font-size:22px;
+  cursor:pointer;
+}
+.overlay-box ul{
+  padding-left:18px;
+}
+.overlay-box li{
+  margin-bottom:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="player">
+  <video id="video" playsinline muted></video>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="left">
+
+      <!-- PLAY -->
+      <button id="playBtn">
+        <svg id="playIcon" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" style="display:none">
+          <rect x="6" y="4" width="4" height="16"/>
+          <rect x="14" y="4" width="4" height="16"/>
+        </svg>
+      </button>
+
+      <!-- VOLUME -->
+      <div class="volume">
+        <button id="volumeBtn">
+          <svg id="volHigh" viewBox="0 0 24 24">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <svg id="volMed" viewBox="0 0 24 24" style="display:none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+          </svg>
+          <svg id="volMute" viewBox="0 0 24 24" style="display:none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+        </button>
+        <input type="range" id="volume" min="0" max="100" value="100">
+      </div>
+
+      <div class="live"><div class="dot"></div>LIVE</div>
+    </div>
+
+    <div class="right">
+      <div class="quality">
+        <button id="qualityBtn">Auto</button>
+        <div class="quality-menu" id="qualityMenu"></div>
+      </div>
+
+      <button id="fsBtn">
+        <svg id="fsEnter" viewBox="0 0 24 24">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3
+                   m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+        <svg id="fsExit" viewBox="0 0 24 24" style="display:none">
+          <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3
+                   m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="contextMenu">
+  <div class="cm-item" id="cmAbout">About this video</div>
+  <div class="cm-item" id="cmKeys">Keyboard shortcuts</div>
+  <div class="cm-item" id="cmPip">Picture in Picture (PiP)</div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="overlay-box">
+    <div class="overlay-close" id="overlayClose">✕</div>
+    <div id="overlayContent"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.8"></script>
+<script>
+/* ================= STREAM ================= */
+const STREAM="https://tv.econet.hr/Arena7/index.m3u8";
+const video=document.getElementById("video");
+let hls,lastVolume=1;
+
+/* ================= HELPERS ================= */
+function updatePlay(){
+  playIcon.style.display=video.paused?"block":"none";
+  pauseIcon.style.display=video.paused?"none":"block";
+}
+function updateVolumeIcon(){
+  volHigh.style.display=volMed.style.display=volMute.style.display="none";
+  if(video.muted||video.volume===0)volMute.style.display="block";
+  else if(video.volume<0.5)volMed.style.display="block";
+  else volHigh.style.display="block";
+}
+function updateFsIcon(){
+  const fs=!!document.fullscreenElement;
+  fsEnter.style.display=fs?"none":"block";
+  fsExit.style.display=fs?"block":"none";
+}
+
+/* ================= LOAD ================= */
+function load(){
+  if(hls)hls.destroy();
+  video.muted=true;
+  video.autoplay=true;
+  hls=new Hls({liveSyncDurationCount:3});
+  hls.loadSource(STREAM);
+  hls.attachMedia(video);
+  hls.on(Hls.Events.MANIFEST_PARSED,(e,d)=>{
+    buildQuality(d.levels);
+    video.play().catch(()=>{});
+  });
+}
+
+/* ================= QUALITY ================= */
+function buildQuality(levels){
+  qualityMenu.innerHTML="";
+  const auto=document.createElement("div");
+  auto.textContent="Auto";
+  auto.onclick=()=>{hls.currentLevel=-1;qualityBtn.textContent="Auto";qualityMenu.style.display="none"};
+  qualityMenu.appendChild(auto);
+  [...new Set(levels.map(l=>l.height))].sort((a,b)=>b-a).forEach(h=>{
+    const el=document.createElement("div");
+    el.textContent=h+"p";
+    el.onclick=()=>{
+      hls.currentLevel=hls.levels.findIndex(l=>l.height===h);
+      qualityBtn.textContent=h+"p";
+      qualityMenu.style.display="none";
+    };
+    qualityMenu.appendChild(el);
+  });
+}
+
+/* ================= EVENTS ================= */
+playBtn.onclick=()=>video.paused?video.play():video.pause();
+video.onplay=video.onpause=updatePlay;
+
+volume.oninput=e=>{
+  video.volume=e.target.value/100;
+  if(video.volume>0){lastVolume=video.volume;video.muted=false}
+  updateVolumeIcon();
+};
+volumeBtn.onclick=()=>{
+  if(video.muted||video.volume===0){
+    video.muted=false;
+    video.volume=lastVolume||0.5;
+    volume.value=video.volume*100;
+  }else{
+    lastVolume=video.volume;
+    video.muted=true;
+    volume.value=0;
+  }
+  updateVolumeIcon();
+};
+
+qualityBtn.onclick=()=>qualityMenu.style.display=
+  qualityMenu.style.display==="flex"?"none":"flex";
+
+fsBtn.onclick=()=>{
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+};
+document.onfullscreenchange=updateFsIcon;
+
+/* ================= CONTEXT MENU ================= */
+player.oncontextmenu=e=>{
+  e.preventDefault();
+  contextMenu.style.left=e.clientX+"px";
+  contextMenu.style.top=e.clientY+"px";
+  contextMenu.style.display="block";
+};
+document.onclick=()=>contextMenu.style.display="none";
+
+/* ================= OVERLAY ================= */
+function openOverlay(html){
+  overlayContent.innerHTML=html;
+  overlay.style.display="flex";
+}
+overlayClose.onclick=()=>overlay.style.display="none";
+overlay.onclick=e=>{if(e.target===overlay)overlay.style.display="none"};
+
+cmAbout.onclick=()=>openOverlay(`
+  <h2>About this video</h2>
+  <p>Custom HLS LIVE player<br>Arena Sport stream</p>
+`);
+
+cmKeys.onclick=()=>openOverlay(`
+  <h2>Keyboard shortcuts</h2>
+  <ul>
+    <li><b>Space</b> – Play / Pause</li>
+    <li><b>M</b> – Mute</li>
+    <li><b>↑ / ↓</b> – Volume</li>
+    <li><b>F</b> – Fullscreen</li>
+    <li><b>Esc</b> – Exit fullscreen</li>
+    <li><b>P</b> – Picture in Picture</li>
+  </ul>
+`);
+
+cmPip.onclick=async()=>{
+  if(document.pictureInPictureEnabled){
+    try{await video.requestPictureInPicture()}catch{}
+  }
+};
+
+/* ================= KEYBOARD SHORTCUTS ================= */
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
+
+  switch(e.key.toLowerCase()){
+    case " ":
+      e.preventDefault();
+      video.paused?video.play():video.pause();
+      break;
+    case "m":
+      volumeBtn.click();
+      break;
+    case "f":
+      fsBtn.click();
+      break;
+    case "p":
+      cmPip.click();
+      break;
+    case "arrowup":
+      video.volume=Math.min(1,video.volume+0.1);
+      volume.value=video.volume*100;
+      updateVolumeIcon();
+      break;
+    case "arrowdown":
+      video.volume=Math.max(0,video.volume-0.1);
+      volume.value=video.volume*100;
+      updateVolumeIcon();
+      break;
+  }
+});
+
+/* ================= INIT ================= */
+video.volume=1;
+updatePlay();
+updateVolumeIcon();
+updateFsIcon();
+load();
+</script>
+
+</body>
+</html>
