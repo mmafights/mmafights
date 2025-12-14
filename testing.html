@@ -1,0 +1,45 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embed</title>
+    <script id="aclib" type="text/javascript" src="//acscdn.com/script/aclib.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe 
+    src="https://stellarthread.com/footy.php?player=desktop&live=caextra2hd" 
+    frameborder="0" 
+    allowfullscreen>
+  </iframe>
+    <script type="text/javascript">
+    aclib.runPop({
+      zoneId: '10298126',
+    });
+  </script>
+</body>
+</html>
