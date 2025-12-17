@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DASH Fullscreen Player</title>
+<title>DASH Player</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 
@@ -18,8 +18,7 @@ html,body{
 }
 video{
   position:fixed;
-  top:0;
-  left:0;
+  inset:0;
   width:100vw;
   height:100vh;
   background:#000;
@@ -29,24 +28,16 @@ video{
 
 <script>
 (function(){
-  var allowed = ["w3schools.com", "strims.fun"];
+  const allowed = ["strims.fun", "w3schools.com"];
 
   if (window.top === window.self) {
     location.replace("https://www.google.com");
     return;
   }
 
-  var ref = document.referrer || "";
-  var ok = false;
+  const ref = document.referrer;
 
-  for (var i = 0; i < allowed.length; i++) {
-    if (ref.includes(allowed[i])) {
-      ok = true;
-      break;
-    }
-  }
-
-  if (!ok) {
+  if (ref && !allowed.some(d => ref.includes(d))) {
     location.replace("https://www.google.com");
   }
 })();
@@ -55,43 +46,39 @@ video{
 
 <body>
 
-<video id="video" controls autoplay playsinline></video>
+<video
+  id="video"
+  autoplay
+  muted
+  playsinline
+  controls
+></video>
 
 <script>
-async function initPlayer() {
-  shaka.polyfill.installAll();
+shaka.polyfill.installAll();
 
-  if (!shaka.Player.isBrowserSupported()) {
-    return;
-  }
-
-  const video = document.getElementById("video");
-  const player = new shaka.Player(video);
-
-  player.configure({
-    drm: {
-      clearKeys: {
-        "d266a481984d85a33bdfba194daa73cc": "e521b21fb5c72f9a5b59a3c8afd4f97a"
-      }
-    }
-  });
-
-  try {
-    await player.load(
-      "https://r.dcs.redcdn.pl/livedash/play/playtv/indigo/live/tvn_7/live.livx?indexMode&futc"
-    );
-  } catch (e) {
-    console.error(e);
-  }
+if (!shaka.Player.isBrowserSupported()) {
+  console.error("Browser not supported");
 }
 
-initPlayer();
+const video = document.getElementById("video");
+const player = new shaka.Player(video);
 
-document.addEventListener("click", () => {
-  const v = document.getElementById("video");
-  if (v.requestFullscreen && !document.fullscreenElement) {
-    v.requestFullscreen().catch(()=>{});
+player.configure({
+  drm: {
+    clearKeys: {
+      "d266a481984d85a33bdfba194daa73cc": "e521b21fb5c72f9a5b59a3c8afd4f97a"
+    }
   }
+});
+
+player.load(
+  "https://r.dcs.redcdn.pl/livedash/play/playtv/indigo/live/tvn_7/live.livx?indexMode&futc"
+).then(() => {
+  video.muted = true;
+  video.play().catch(()=>{});
+}).catch(err => {
+  console.error("LOAD ERROR", err);
 });
 </script>
 
