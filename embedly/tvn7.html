@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DASH Fullscreen Player</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  overflow:hidden;
+}
+video{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:#000;
+  object-fit:contain;
+}
+</style>
+
+<script>
+(function(){
+  var allowed = ["w3schools.com", "strims.fun"];
+
+  if (window.top === window.self) {
+    location.replace("https://www.google.com");
+    return;
+  }
+
+  var ref = document.referrer || "";
+  var ok = false;
+
+  for (var i = 0; i < allowed.length; i++) {
+    if (ref.includes(allowed[i])) {
+      ok = true;
+      break;
+    }
+  }
+
+  if (!ok) {
+    location.replace("https://www.google.com");
+  }
+})();
+</script>
+</head>
+
+<body>
+
+<video id="video" controls autoplay playsinline></video>
+
+<script>
+async function initPlayer() {
+  shaka.polyfill.installAll();
+
+  if (!shaka.Player.isBrowserSupported()) {
+    return;
+  }
+
+  const video = document.getElementById("video");
+  const player = new shaka.Player(video);
+
+  player.configure({
+    drm: {
+      clearKeys: {
+        "d266a481984d85a33bdfba194daa73cc": "e521b21fb5c72f9a5b59a3c8afd4f97a"
+      }
+    }
+  });
+
+  try {
+    await player.load(
+      "https://r.dcs.redcdn.pl/livedash/play/playtv/indigo/live/tvn_7/live.livx?indexMode&futc"
+    );
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+initPlayer();
+
+document.addEventListener("click", () => {
+  const v = document.getElementById("video");
+  if (v.requestFullscreen && !document.fullscreenElement) {
+    v.requestFullscreen().catch(()=>{});
+  }
+});
+</script>
+
+</body>
+</html>
