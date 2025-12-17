@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple DASH Player</title>
+
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:#000;
+}
+video{
+  width:100%;
+  height:100%;
+  background:#000;
+}
+</style>
+
+<script>
+(function(){
+  var allowed=["https://www.w3schools.com/","www.embedly.xyz"];
+  var r=document.referrer||"";
+  var ok=false;
+  for(var i=0;i<allowed.length;i++){
+    if(r.includes(allowed[i])) ok=true;
+  }
+  if(!ok){
+    location.href="https://www.google.com";
+  }
+})();
+</script>
+</head>
+
+<body>
+
+<video id="video" controls autoplay muted playsinline></video>
+
+<script>
+var video=document.getElementById("video");
+var player=dashjs.MediaPlayer().create();
+player.initialize(
+  video,
+  "https://liveovh011.cda.pl/enc115/tvp1hdraw/tvp1hdraw.mpd",
+  true
+);
+</script>
+
+</body>
+</html>
