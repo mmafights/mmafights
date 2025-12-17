@@ -1,32 +1,56 @@
 <!doctype html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DASH Fullscreen Player</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DASH Fullscreen Player</title>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      overflow: hidden;
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  overflow:hidden;
+}
+video{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100vw;
+  height:100vh;
+  background:#000;
+  object-fit:contain;
+}
+</style>
+
+<script>
+(function(){
+  var allowed = ["w3schools.com", "strims.fun"];
+
+  if (window.top === window.self) {
+    location.replace("https://www.google.com");
+    return;
+  }
+
+  var ref = document.referrer || "";
+  var ok = false;
+
+  for (var i = 0; i < allowed.length; i++) {
+    if (ref.includes(allowed[i])) {
+      ok = true;
+      break;
     }
+  }
 
-    video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: #000;
-      object-fit: contain;
-    }
-  </style>
+  if (!ok) {
+    location.replace("https://www.google.com");
+  }
+})();
+</script>
 </head>
 
 <body>
@@ -38,7 +62,6 @@ async function initPlayer() {
   shaka.polyfill.installAll();
 
   if (!shaka.Player.isBrowserSupported()) {
-    alert("Prohlížeč nepodporuje Shaka Player.");
     return;
   }
 
@@ -48,9 +71,7 @@ async function initPlayer() {
   player.configure({
     drm: {
       clearKeys: {
-
         "9686ef8b4619efdda565ce80719dca1c": "2722defe7e502f6d3cd5f4d65d7ad53b"
-
       }
     }
   });
@@ -59,9 +80,8 @@ async function initPlayer() {
     await player.load(
       "https://r.dcs.redcdn.pl/livedash/play/playtv/indigo/live/tvn/live.livx?indexMode&futc"
     );
-    console.log("Stream načten");
   } catch (e) {
-    console.error("Chyba přehrávání:", e);
+    console.error(e);
   }
 }
 
