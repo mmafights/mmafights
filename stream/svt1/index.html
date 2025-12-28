@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<title>Clappr DASH Player</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  background:#000;
-}
-#player{
-  width:100%;
-  height:100%;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DASH Player (Clappr + Shaka)</title>
+  <style>
+    html, body, #player {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+  </style>
 </head>
 <body>
+  <div id="player"></div>
 
-<div id="player"></div>
+  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <script>
+    // Veřejné demo MPD (funguje, má adaptivní kvality)
+    const MPD = "https://svt-live-channel.akamaized.net/l4/se/svt1/manifest.mpd";
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
-
-<script>
-var player = new Clappr.Player({
-  source: "https://svt-live-channel.akamaized.net/l4/se/svt1/manifest.mpd",
-  parentId: "#player",
-  autoPlay: true,
-  mute: true,
-  height: "100%",
-  width: "100%",
-  plugins: [DashShakaPlayback],
-  shakaConfiguration: {
-    abr: {
-      enabled: true
-    }
-  }
-});
-</script>
-
+    new Clappr.Player({
+      source: MPD,
+      parentId: "#player",
+      autoPlay: true,
+      mute: true,
+      width: "100%",
+      height: "100%",
+      plugins: [DashShakaPlayback],
+      shakaConfiguration: {
+        abr: { enabled: true },
+        streaming: {
+          bufferingGoal: 20,
+          rebufferingGoal: 3,
+          retryParameters: {
+            maxAttempts: 6,
+            baseDelay: 500,
+            backoffFactor: 1.5,
+            fuzzFactor: 0.5
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
